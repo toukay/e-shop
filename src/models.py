@@ -15,6 +15,8 @@ from sqlalchemy import (
 )
 import pydantic
 from decimal import Decimal
+from typing import Optional
+
 
 class Base(DeclarativeBase, MappedAsDataclass, dataclass_callable=pydantic.dataclasses.dataclass):
     pass
@@ -33,7 +35,7 @@ class Product(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String)
-    description: Mapped[str] = mapped_column(String)  
+    description: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     price: Mapped[Decimal] = mapped_column(DECIMAL(precision=10, scale=2))
 
     brand_id: Mapped[int] = mapped_column(ForeignKey("brand.id"))
