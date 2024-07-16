@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from models import Category
 from schemas import CategoryInputSchema, CategorySchema
 from repositories import CategoryRepository
+from custom_exceptions import EntityNotFoundError
 
 
 class CategoryService:
@@ -14,7 +15,9 @@ class CategoryService:
     
 
     def get_category_by_id(self, category_id: int) -> Category:
-        return self.repository.get(category_id)
+        category = self.repository.get(category_id)
+        if not category: raise EntityNotFoundError("Category", category_id)
+        return category
     
     
     def create_category(self, category_input: CategoryInputSchema) -> Category:
@@ -26,15 +29,10 @@ class CategoryService:
     
     def update_category(self, category_id: int, category_input: CategoryInputSchema) -> Category:
         category = self.get_category_by_id(category_id)
-        if category:
-            category.name = category_input.name
-            return self.repository.update(category)
-        return None
+        category.name = category_input.name
+        return self.repository.update(category)
     
     
-    def delete_category(self, category_id: int) -> bool:
+    def delete_category(self, category_id: int) -> None:
         category = self.get_category_by_id(category_id)
-        if category:
-            self.repository.delete(category)
-            return True
-        return False
+        self.repository.delete(category)

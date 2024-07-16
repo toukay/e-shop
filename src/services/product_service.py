@@ -21,20 +21,15 @@ class ProductService:
 
     
     def get_product_by_id(self, product_id: int) -> Product:
-        self.repository.get(product_id)
+        product = self.repository.get(product_id)
+        if not product: raise EntityNotFoundError("Product", product_id)
+        return product
 
     
     def create_product(self, product_input: ProductInputSchema) -> Product:
         brand = self.brand_service.get_brand_by_id(product_input.brand_id)
-        if not brand: raise EntityNotFoundError("Brand", product_input.brand_id)
-
         product_type = self.product_type_service.get_type_by_id(product_input.product_type_id)
-        if not product_type: raise EntityNotFoundError("ProductType", product_input.product_type_id)
-
         categories = [self.category_service.get_category_by_id(c_id) for c_id in product_input.category_ids]
-        if None in categories: 
-            invalid_ids = [id for id, category in zip(product_input.category_ids, categories) if category is None]
-            raise EntityNotFoundError("Category", invalid_ids)
 
         product = Product(
             name=product_input.name,
@@ -55,15 +50,8 @@ class ProductService:
 
         if product:
             brand = self.brand_service.get_brand_by_id(product_input.brand_id)
-            if not brand: raise EntityNotFoundError("Brand", product_input.brand_id)
-
             product_type = self.product_type_service.get_type_by_id(product_input.product_type_id)
-            if not product_type: raise EntityNotFoundError("ProductType", product_input.product_type_id)
-
             categories = [self.category_service.get_category_by_id(c_id) for c_id in product_input.category_ids]
-            if None in categories: 
-                invalid_ids = [id for id, category in zip(product_input.category_ids, categories) if category is None]
-                raise EntityNotFoundError("Category", invalid_ids)
 
             product.name = product_input.name
             product.description = product_input.description
@@ -79,11 +67,6 @@ class ProductService:
         return None
     
 
-    def delete_product(self, product_id: int) -> bool:
+    def delete_product(self, product_id: int) -> None:
         product = self.get_product_by_id(product_id)
-
-        if product:
-            self.repository.delete(product_id)
-            return True
-        
-        return False
+        self.repository.delete(product_id)

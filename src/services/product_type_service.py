@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from models import ProductType
 from schemas import ProductTypeInputSchema, ProductTypeSchema
 from repositories import ProductTypeRepository
+from custom_exceptions import EntityNotFoundError
 
 
 class ProductTypeService:
@@ -14,7 +15,8 @@ class ProductTypeService:
     
 
     def get_type_by_id(self, product_type_id: int) -> ProductType:
-        return self.repository.get(product_type_id)
+        product_type = self.repository.get(product_type_id)
+        if not product_type: raise EntityNotFoundError("ProductType", product_type_id)
     
 
     def create_type(self, product_type_input: ProductTypeInputSchema) -> ProductType:
@@ -34,7 +36,4 @@ class ProductTypeService:
 
     def delete_type(self, product_type_id: int) -> bool:
         product_type = self.get_type_by_id(product_type_id)
-        if product_type:
-            self.repository.delete(product_type_id)
-            return True
-        return False
+        self.repository.delete(product_type_id)
