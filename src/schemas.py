@@ -1,13 +1,17 @@
 from pydantic import (
-    BaseModel, 
+    BaseModel,
+    ConfigDict,
     Field,
-    field_validator
+    field_validator,
+    ValidationError
 )
 from decimal import Decimal
 from typing import Optional
 
 
 class ProcuctSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
     description: Optional[str] = None
@@ -32,6 +36,8 @@ class ProductInputSchema(BaseModel):
 
 
 class BrandSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
 
@@ -46,6 +52,8 @@ class BrandInputSchema(BaseModel):
 
 
 class ProductTypeSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
 
@@ -60,6 +68,8 @@ class ProductTypeInputSchema(BaseModel):
 
 
 class CategorySchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
     name: str
 
