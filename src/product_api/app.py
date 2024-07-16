@@ -1,10 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes import api_router
-
+from contextlib import asynccontextmanager
 import database
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await database.create_all()
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -16,9 +21,6 @@ app.add_middleware(
 
 app.include_router(api_router)
 
-@app.on_event("startup")
-async def startup_event():
-    database.create_all()
 
 if __name__ == "__main__":
     import uvicorn
