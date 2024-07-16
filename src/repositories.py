@@ -42,24 +42,20 @@ class BaseRepository[T]:
 
 
 class ProductRepository(BaseRepository[Product]):
-    def __init__(self, db: Session):
-        super().__init__(db)
-        self.model = Product
+    def __init__(self, session: Session):
+        super().__init__(session, Product)
 
 
 class ProductTypeRepository(BaseRepository[ProductType]):
-    def __init__(self, db: Session):
-        super().__init__(db)
-        self.model = ProductType
+    def __init__(self, session: Session):
+        super().__init__(session, ProductType)
 
 
 class BrandRepository(BaseRepository[Brand]):
-    def __init__(self, db: Session):
-        super().__init__(db)
-        self.model = Brand
+    def __init__(self, session: Session):
+        super().__init__(session, Brand)
 
 
 class CategoryRepository(BaseRepository[Category]):
-    def __init__(self, db: Session):
-        super().__init__(db)
-        self.model = Category
+    def __init__(self, session: Session):
+        super().__init__(session, Category)
