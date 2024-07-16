@@ -18,7 +18,7 @@ from decimal import Decimal
 from typing import Optional
 
 
-class Base(DeclarativeBase, MappedAsDataclass, dataclass_callable=pydantic.dataclasses.dataclass):
+class Base(DeclarativeBase):
     pass
 
 
@@ -33,10 +33,10 @@ product_category_association = Table(
 class Product(Base):
     __tablename__ = "product"
 
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(String)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, nullable=False)
+    name: Mapped[str] = mapped_column(String, nullable=False)
     description: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    price: Mapped[Decimal] = mapped_column(DECIMAL(precision=10, scale=2))
+    price: Mapped[Decimal] = mapped_column(DECIMAL(precision=10, scale=2), nullable=False)
 
     brand_id: Mapped[int] = mapped_column(ForeignKey("brand.id"))
     product_type_id: Mapped[int] = mapped_column(ForeignKey("product_type.id"))
@@ -47,41 +47,39 @@ class Product(Base):
         'Category', 
         secondary=product_category_association, 
         back_populates="products", 
-        default_factory=lambda: []
     )
 
 
 class Brand(Base):
     __tablename__ = "brand"
     
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(String)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, nullable=False)
+    name: Mapped[str] = mapped_column(String, nullable=False)
 
     products: Mapped[list['Product']] = relationship(
-        'Product', back_populates="brand", default_factory=lambda: []
+        'Product', back_populates="brand"
     )
 
 
 class ProductType(Base):
     __tablename__ = "product_type"
     
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(String)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, nullable=False)
+    name: Mapped[str] = mapped_column(String, nullable=False)
 
     products: Mapped[list['Product']] = relationship(
-        'Product', back_populates="product_type", default_factory=lambda: []
+        'Product', back_populates="product_type"
     )
 
 
 class Category(Base):
     __tablename__ = "category"
     
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(String)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, nullable=False)
+    name: Mapped[str] = mapped_column(String, nullable=False)
 
     products: Mapped[list['Product']] = relationship(
         'Product',
         secondary=product_category_association,
         back_populates="categories", 
-        default_factory=lambda: []
     )
