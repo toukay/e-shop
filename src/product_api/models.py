@@ -1,3 +1,4 @@
+from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import (
     DeclarativeBase, 
     MappedAsDataclass, 
@@ -18,7 +19,7 @@ from decimal import Decimal
 from typing import Optional
 
 
-class Base(DeclarativeBase):
+class Base(AsyncAttrs, DeclarativeBase):
     pass
 
 

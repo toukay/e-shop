@@ -8,6 +8,7 @@ import database
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await database.create_all()
+    yield
 
 app = FastAPI(lifespan=lifespan)
 

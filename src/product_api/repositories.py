@@ -1,5 +1,6 @@
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from models import (
     Product,
@@ -9,53 +10,73 @@ from models import (
 )
 
 class BaseRepository[T]:
-    def __init__(self, session: Session, model: T):
+    def __init__(self, session: AsyncSession, model: T):
         self.session = session
         self.model = model
 
-    def get(self, id: int) -> T:
+    async def get_all(self) -> list[T]:
+        statement = select(self.model)
+        result = await self.session.execute(statement)
+        return result.scalars().all()
+    
+    async def get(self, id: int) -> T:
         statement = select(self.model).where(self.model.id == id)
-        result = self.session.execute(statement)
+        result = await self.session.execute(statement)
         return result.scalars().first()
 
-    def get_all(self) -> list[T]:
-        statement = select(self.model)
-        result = self.session.execute(statement)
-        return result.scalars().all()
-
-    def create(self, obj: T) -> T:
+    async def create(self, obj: T) -> T:
         self.session.add(obj)
-        self.session.commit()
-        self.session.refresh(obj)
+        await self.session.commit()
+        await self.session.refresh(obj)
         return obj
 
-    def update(self, obj: T) -> T:
-        self.session.commit()
-        self.session.refresh(obj)
+    async def update(self, obj: T) -> T:
+        await self.session.commit()
+        await self.session.refresh(obj)
         return obj
 
-    def delete(self, id: int) -> None:
+    async def delete(self, id: int) -> None:
         obj = self.get(id)
         if obj:
-            self.session.delete(obj)
-            self.session.commit()
+            await self.session.delete(obj)
+            await self.session.commit()
 
 
 class ProductRepository(BaseRepository[Product]):
-    def __init__(self, session: Session):
+    def __init__(self, session: AsyncSession):
         super().__init__(session, Product)
+
+    async def get_all(self) -> list[Product]:
+        result = await self.session.execute(
+            select(Product).options(
+                selectinload(Product.brand),
+                selectinload(Product.product_type),
+                selectinload(Product.categories)
+            )
+        )
+        return result.scalars().all()
+    
+    async def get(self, product_id: int) -> Product:
+        result = await self.session.execute(
+            select(Product).options(
+                selectinload(Product.brand),
+                selectinload(Product.product_type),
+                selectinload(Product.categories)
+            ).filter_by(id=product_id)
+        )
+        return result.scalars().first()
 
 
 class ProductTypeRepository(BaseRepository[ProductType]):
-    def __init__(self, session: Session):
+    def __init__(self, session: AsyncSession):
         super().__init__(session, ProductType)
 
 
 class BrandRepository(BaseRepository[Brand]):
-    def __init__(self, session: Session):
+    def __init__(self, session: AsyncSession):
         super().__init__(session, Brand)
 
 
 class CategoryRepository(BaseRepository[Category]):
-    def __init__(self, session: Session):
+    def __init__(self, session: AsyncSession):
         super().__init__(session, Category)
