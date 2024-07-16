@@ -6,7 +6,8 @@ name = "pypi"
 [packages]
 sqlalchemy = "*"
 pydantic = "*"
-flask = "*"
+fastapi = "*"
+uvicorn = "*"
 
 [dev-packages]
 

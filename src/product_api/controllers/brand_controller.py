@@ -1,66 +1,60 @@
-from flask import Blueprint, request, Response, jsonify 
+from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from schemas import BrandInputSchema, BrandSchema
 from services.brand_service import BrandService
 from custom_exceptions import EntityNotFoundError
-
 import database
 
-brand_bp = Blueprint("brand", __name__)
 
-@brand_bp.route('/brands', methods=['GET'])
-def get_brands() -> Response:
-    session: Session = next(database.generate_session())
+router = APIRouter()
+
+def get_session() -> Session:
+    return next(database.generate_session())
+
+
+@router.get('/brands', response_model=list[BrandSchema])
+def get_brands(session: Session = Depends(get_session)):
     service = BrandService(session)
     brands = service.get_all_brands()
-    return jsonify([BrandSchema.model_validate(brand).model_dump() for brand in brands])
+    return [BrandSchema.model_validate(brand).model_dump() for brand in brands]
 
 
-@brand_bp.route('/brands/<int:brand_id>', methods=['GET'])
-def get_brand(brand_id: int) -> Response | tuple[Response, int]:
-    session: Session = next(database.generate_session())
+@router.get('/brands/{brand_id}', response_model=BrandSchema)
+def get_brand(brand_id: int, session: Session = Depends(get_session)):
     service = BrandService(session)
     try:
         brand = service.get_brand_by_id(brand_id)
-        return jsonify(BrandSchema.model_validate(brand).model_dump())
+        return BrandSchema.model_validate(brand).model_dump()
     except EntityNotFoundError as e:
-        return jsonify({"error": str(e)}), 404
+        raise HTTPException(status_code=404, detail=str(e))
 
 
-@brand_bp.route('/brands', methods=['POST'])
-def create_brand() -> tuple[Response, int]:
-    session: Session = next(database.generate_session())
+@router.post('/brands', response_model=BrandSchema)
+def create_brand(brand_data: BrandInputSchema, session: Session = Depends(get_session)):
     service = BrandService(session)
-    brand_data = request.json
     try:
-        brand_input = BrandInputSchema(**brand_data)
-        brand = service.create_brand(brand_input)
-        return jsonify(BrandSchema.model_validate(brand).model_dump()), 201
+        brand = service.create_brand(brand_data)
+        return BrandSchema.model_validate(brand).model_dump()
     except ValueError as e:
-        return jsonify({"error": str(e)}), 400
+        raise HTTPException(status_code=400, detail=str(e))
 
 
-@brand_bp.route('/brands/<int:brand_id>', methods=['PUT'])
-def update_brand(brand_id: int) -> Response | tuple[Response, int]:
-    session: Session = next(database.generate_session())
+@router.put('/brands/{brand_id}', response_model=BrandSchema)
+def update_brand(brand_id: int, brand_data: BrandInputSchema, session: Session = Depends(get_session)):
     service = BrandService(session)
-    brand_data = request.json
     try:
-        brand_input = BrandInputSchema(**brand_data)
-        brand = service.update_brand(brand_id, brand_input)
-        return jsonify(BrandSchema.model_validate(brand).model_dump())
+        brand = service.update_brand(brand_id, brand_data)
+        return BrandSchema.model_validate(brand).model_dump()
     except ValueError as e:
-        return jsonify({"error": str(e)}), 400
+        return HTTPException(status_code=400, detail=str(e))
     except EntityNotFoundError as e:
-        return jsonify({"error": str(e)}), 404
+        return HTTPException(status_code=404, detail=str(e))
 
 
-@brand_bp.route('/brands/<int:brand_id>', methods=['DELETE'])
-def delete_brand(brand_id: int) -> tuple[Response, int]:
-    session: Session = next(database.generate_session())
+@router.delete('/brands/{brand_id}', status_code=204)
+def delete_brand(brand_id: int, brand_data: BrandInputSchema, session: Session = Depends(get_session)):
     service = BrandService(session)
     try:
-        brand = service.delete_brand(brand_id)
-        return '', 204
+        service.delete_brand(brand_id)
     except EntityNotFoundError as e:
-        return jsonify({"error": str(e)}), 404
+        return HTTPException(status_code=404, detail=str(e))

@@ -1,67 +1,54 @@
-from flask import Blueprint, request, Response, jsonify
+from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from schemas import ProductTypeInputSchema, ProductTypeSchema
 from services.product_type_service import ProductTypeService
 from custom_exceptions import EntityNotFoundError
 import database
 
+router = APIRouter()
 
-product_type_bp = Blueprint("product_type", __name__)
+def get_session() -> Session:
+    return next(database.generate_session())
 
-
-@product_type_bp.route('/product-types', methods=['GET'])
-def get_types() -> Response:
-    session: Session = next(database.generate_session())
+@router.get('/product-types', response_model=list[ProductTypeSchema])
+def get_types(session: Session = Depends(get_session)):
     service = ProductTypeService(session)
     product_types = service.get_all_types()
-    return jsonify([ProductTypeSchema.model_validate(p_t).model_dump() for p_t in product_types])
+    return [ProductTypeSchema.model_validate(p_t).model_dump() for p_t in product_types]
 
-
-@product_type_bp.route('/product-types/<int:product_type_id>', methods=['GET'])
-def get_type(product_type_id: int) -> Response | tuple[Response, int]:
-    session: Session = next(database.generate_session())
+@router.get('/product-types/{product_type_id}', response_model=ProductTypeSchema)
+def get_type(product_type_id: int, session: Session = Depends(get_session)):
     service = ProductTypeService(session)
     try:
         product_type = service.get_type_by_id(product_type_id)
-        return jsonify(ProductTypeSchema.model_validate(product_type).model_dump())
+        return ProductTypeSchema.model_validate(product_type).model_dump()
     except EntityNotFoundError as e:
-        return jsonify({"error": str(e)}), 404
+        raise HTTPException(status_code=404, detail=str(e))
 
-
-@product_type_bp.route('/product-types', methods=['POST'])
-def create_type() -> tuple[Response, int]:
-    session: Session = next(database.generate_session())
+@router.post('/product-types', response_model=ProductTypeSchema)
+def create_type(product_type_data: ProductTypeInputSchema, session: Session = Depends(get_session)):
     service = ProductTypeService(session)
-    product_type_data = request.json
     try:
-        product_type_input = ProductTypeInputSchema(**product_type_data)
-        product_type = service.create_type(product_type_input)
-        return jsonify(ProductTypeSchema.model_validate(product_type).model_dump()), 201
+        product_type = service.create_type(product_type_data)
+        return ProductTypeSchema.model_validate(product_type).model_dump()
     except ValueError as e:
-        return jsonify({"error": str(e)}), 400
+        raise HTTPException(status_code=400, detail=str(e))
 
-
-@product_type_bp.route('/product-types/<int:product_type_id>', methods=['PUT'])
-def update_type(product_type_id: int) -> Response | tuple[Response, int]:
-    session: Session = next(database.generate_session())
+@router.put('/product-types/{product_type_id}', response_model=ProductTypeSchema)
+def update_type(product_type_id: int, product_type_data: ProductTypeInputSchema, session: Session = Depends(get_session)):
     service = ProductTypeService(session)
-    product_type_data = request.json
     try:
-        product_type_input = ProductTypeInputSchema(**product_type_data)
-        product_type = service.update_type(product_type_id, product_type_input)
-        return jsonify(ProductTypeSchema.model_validate(product_type).model_dump())
+        product_type = service.update_type(product_type_id, product_type_data)
+        return ProductTypeSchema.model_validate(product_type).model_dump()
     except ValueError as e:
-        return jsonify({"error": str(e)}), 400
+        raise HTTPException(status_code=400, detail=str(e))
     except EntityNotFoundError as e:
-        return jsonify({"error": str(e)}), 404
+        raise HTTPException(status_code=404, detail=str(e))
 
-
-@product_type_bp.route('/product-types/<int:product_type_id>', methods=['DELETE'])
-def delete_type(product_type_id: int) -> tuple[Response, int]:
-    session: Session = next(database.generate_session())
+@router.delete('/product-types/{product_type_id}', status_code=204)
+def delete_type(product_type_id: int, session: Session = Depends(get_session)):
     service = ProductTypeService(session)
     try:
-        brand = service.delete_brand(product_type_id)
-        return '', 204
+        service.delete_type(product_type_id)
     except EntityNotFoundError as e:
-        return jsonify({"error": str(e)}), 404
+        raise HTTPException(status_code=404, detail=str(e))
