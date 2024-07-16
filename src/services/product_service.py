@@ -16,8 +16,8 @@ class ProductService:
         self.category_service = CategoryService(session)
 
     
-    def get_all_products(self):
-        self.repository.get_all()
+    def get_all_products(self) -> list[Product]:
+        return self.repository.get_all()
 
     
     def get_product_by_id(self, product_id: int) -> Product:
