@@ -8,15 +8,15 @@ import database
 
 category_bp = Blueprint("category", __name__)
 
-@category_bp.route('/categorys', methods=['GET'])
-def get_categorys() -> Response:
+@category_bp.route('/categories', methods=['GET'])
+def get_categories() -> Response:
     session: Session = next(database.generate_session())
     service = CategoryService(session)
-    categorys = service.get_all_categorys()
-    return jsonify([CategorySchema.model_validate(category).model_dump() for category in categorys])
+    categories = service.get_all_categories()
+    return jsonify([CategorySchema.model_validate(category).model_dump() for category in categories])
 
 
-@category_bp.route('/categorys/<int:category_id>', methods=['GET'])
+@category_bp.route('/categories/<int:category_id>', methods=['GET'])
 def get_category(category_id: int) -> Response | tuple[Response, int]:
     session: Session = next(database.generate_session())
     service = CategoryService(session)
@@ -27,7 +27,7 @@ def get_category(category_id: int) -> Response | tuple[Response, int]:
         return jsonify({"error": str(e)}), 404
 
 
-@category_bp.route('/categorys', methods=['POST'])
+@category_bp.route('/categories', methods=['POST'])
 def create_category() -> tuple[Response, int]:
     session: Session = next(database.generate_session())
     service = CategoryService(session)
@@ -40,7 +40,7 @@ def create_category() -> tuple[Response, int]:
         return jsonify({"error": str(e)}), 400
 
 
-@category_bp.route('/categorys/<int:category_id>', methods=['PUT'])
+@category_bp.route('/categories/<int:category_id>', methods=['PUT'])
 def update_category(category_id: int) -> Response | tuple[Response, int]:
     session: Session = next(database.generate_session())
     service = CategoryService(session)
@@ -55,7 +55,7 @@ def update_category(category_id: int) -> Response | tuple[Response, int]:
         return jsonify({"error": str(e)}), 404
 
 
-@category_bp.route('/categorys/<int:category_id>', methods=['DELETE'])
+@category_bp.route('/categories/<int:category_id>', methods=['DELETE'])
 def delete_category(category_id: int) -> tuple[Response, int]:
     session: Session = next(database.generate_session())
     service = CategoryService(session)
