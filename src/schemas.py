@@ -9,7 +9,7 @@ from decimal import Decimal
 from typing import Optional
 
 
-class ProcuctSchema(BaseModel):
+class ProductSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
@@ -69,7 +69,7 @@ class ProductTypeInputSchema(BaseModel):
 
 class CategorySchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
-    
+
     id: int
     name: str
 

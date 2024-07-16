@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from models import Product
-from schemas import ProductInputSchema, ProcuctSchema
+from schemas import ProductInputSchema, ProductSchema
 from repositories import ProductRepository
 from services.brand_service import BrandService
 from services.product_type_service import ProductTypeService
