@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Product } from '../../../../core/models/product';
@@ -6,7 +5,7 @@ import { Product } from '../../../../core/models/product';
 @Component({
   selector: 'app-product-listing',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   template: `
     <section class="listing">
       <!-- <img class="listing-photo" [src]="product.photo" alt="photo of {{product.name}}"> -->

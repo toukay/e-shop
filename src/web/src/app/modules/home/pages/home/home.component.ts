@@ -1,18 +1,21 @@
 import { Component, inject } from '@angular/core';
 import { ProductListingComponent } from '../../components/product-listing/product-listing.component';
-import { CommonModule } from '@angular/common';
 import { Product } from '../../../../core/models/product';
 import { ProductsService } from '../../../../core/services/products.service';
+import { HomeModule } from '../../home.module';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, ProductListingComponent],
+  imports: [
+    HomeModule,
+    ProductListingComponent,
+  ],
   template: `
     <section>
       <form action="">
         <input type="text" placeholder="Filter by city" #filter>
-        <button class="primary" type="button">Search</button>
+        <p-button type="button">Search</p-button>
       </form>
     </section>
     <section class="results">
