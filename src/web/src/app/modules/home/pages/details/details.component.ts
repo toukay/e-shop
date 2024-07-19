@@ -4,7 +4,11 @@ import { Component } from '@angular/core';
   selector: 'app-details',
   standalone: true,
   imports: [],
-  templateUrl: './details.component.html',
+  template: `
+    <article>
+      <p>details works!</p>
+    </article>
+  `,
   styleUrl: './details.component.css'
 })
 export class DetailsComponent {
