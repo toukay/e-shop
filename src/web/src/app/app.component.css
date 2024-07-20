@@ -1,0 +1,62 @@
+.hero-section {
+    position: relative;
+    margin-top: -8px;
+    margin-left: -8px;
+    margin-right: -8px;
+    background-image: url('/assets/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 50vh;
+    width: 100vw;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, white 0%, transparent 20%, transparent 80%, white 100%);
+    z-index: 1;
+}
+
+.navbar {
+    padding: 10px;
+    margin-top: 15px;
+    margin-left: 30px;
+    margin-right: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 2;
+    position: relative;
+}
+
+.brand-logo {
+    margin-left: 10px;
+    z-index: 2;
+    position: relative;
+    width: 60px;
+    height: 60px;
+}
+
+.user-section {
+    margin-top: 20px;
+    margin-right: 50px;
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.user-icon, .cart-icon {
+    font-size: 1.5rem;
+    color: hsl(0, 0%, 30%);
+}
+
+.content {
+    margin-left: 10px;
+    margin-right: 10px;
+    z-index: 2;
+    position: relative;
+}

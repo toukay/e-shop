@@ -1,0 +1,62 @@
+<section class="product-listing">
+    <div class="filter-section">
+        <div class="filter-title">
+            <span class="pi pi-filter"></span>
+            <p>Filters</p>
+        </div>
+
+        <div class="filter-category">
+            <h3>Categories</h3>
+            <div *ngFor="let category of categoryList" class="field-checkbox filter-items">
+                <p-checkbox 
+                    [(ngModel)]="selectedCategories"
+                    [label]="category.name" 
+                    name="group" 
+                    [value]="category" />
+            </div>
+        </div>
+        
+        <hr>
+
+        <div class="filter-brand">
+            <h3>Brands</h3>
+            <div *ngFor="let brand of brandList" class="field-checkbox filter-items">
+                <p-checkbox 
+                    [(ngModel)]="selectedCategories"
+                    [label]="brand.name" 
+                    name="group" 
+                    [value]="brand" />
+            </div>
+        </div>
+        
+        <hr>
+
+        <div class="filter-product-type">
+            <h3>Product Types</h3>
+            <div *ngFor="let productType of productTypeList" class="field-checkbox filter-items">
+                <p-checkbox 
+                    [(ngModel)]="selectedCategories"
+                    [label]="productType.name" 
+                    name="group" 
+                    [value]="productType" />
+            </div>
+        </div>
+    </div>
+    <div class="main-section">
+        <form action="" class="search-form">
+            <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input 
+                    pInputText 
+                    type="text" 
+                    placeholder="Search..." />
+            </span>
+        </form>
+        <section class="results">
+            <app-product-listing
+                *ngFor="let product of productList"
+                [product]="product">
+            </app-product-listing>
+        </section>
+    </div>
+</section>

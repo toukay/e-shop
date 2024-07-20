@@ -6,56 +6,56 @@
     object-fit: cover;
     border-radius: 30px;
     float: right;
-  }
-  
-  .listing-heading {
+}
+
+.listing-heading {
     font-size: 48pt;
     font-weight: bold;
     margin-bottom: 15px;
-  }
-  
-  .listing-location::before {
+}
+
+.listing-location::before {
     content: url('/assets/location-pin.svg') / '';
-  }
-  
-  .listing-location {
+}
+
+.listing-location {
     font-size: 24pt;
     margin-bottom: 15px;
-  }
-  
-  .listing-features > .section-heading {
+}
+
+.listing-features > .section-heading {
     color: var(--secondary-color);
     font-size: 24pt;
     margin-bottom: 15px;
-  }
-  
-  .listing-features {
+}
+
+.listing-features {
     margin-bottom: 20px;
-  }
-  
-  .listing-features li {
+}
+
+.listing-features li {
     font-size: 14pt;
-  }
-  
-  li {
+}
+
+li {
     list-style-type: none;
-  }
-  
-  .listing-apply .section-heading {
+}
+
+.listing-apply .section-heading {
     font-size: 18pt;
     margin-bottom: 15px;
-  }
-  
-  label, input {
+}
+
+label, input {
     display: block;
-  }
-  label {
+}
+label {
     color: var(--secondary-color);
     font-weight: bold;
     text-transform: uppercase;
     font-size: 12pt;
-  }
-  input {
+}
+input {
     font-size: 16pt;
     margin-bottom: 15px;
     padding: 10px;
@@ -64,10 +64,10 @@
     border-right: none;
     border-left: none;
     border-bottom: solid .3px;
-  }
-  @media (max-width: 1024px) {
+}
+@media (max-width: 1024px) {
     .listing-photo {
-      width: 100%;
-      height: 400px;
+        width: 100%;
+        height: 400px;
     }
-  }
+}
