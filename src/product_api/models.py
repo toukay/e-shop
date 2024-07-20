@@ -37,6 +37,7 @@ class Product(Base):
     name: Mapped[str] = mapped_column(String, nullable=False)
     description: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     price: Mapped[Decimal] = mapped_column(DECIMAL(precision=10, scale=2), nullable=False)
+    image_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     brand_id: Mapped[int] = mapped_column(ForeignKey("brand.id"))
     product_type_id: Mapped[int] = mapped_column(ForeignKey("product_type.id"))

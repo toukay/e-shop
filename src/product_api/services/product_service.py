@@ -35,6 +35,7 @@ class ProductService:
             name=product_input.name,
             description=product_input.description,
             price=product_input.price,
+            image_url=product_input.image_url,
             brand_id=product_input.brand_id,
             product_type_id=product_input.product_type_id,
             brand=brand,
@@ -56,6 +57,7 @@ class ProductService:
             product.name = product_input.name
             product.description = product_input.description
             product.price = product_input.price
+            product.image_url = product_input.image_url
             product.brand_id = product_input.brand_id
             product.product_type_id = product_input.product_type_id
             product.brand = brand
