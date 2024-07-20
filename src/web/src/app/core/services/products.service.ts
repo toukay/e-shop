@@ -14,12 +14,21 @@ export class ProductsService {
 
   async getAllProducts() : Promise<Product[]> {
     const data = await fetch(`${this.url}/products`);
-    return await data.json() ?? [];
+    const jsonData = await data.json() ?? {};
+    return jsonData.map((product: any) => this.transformProduct(product)) ?? [];
   }
 
   async getProductById(id: Number) : Promise<Product | undefined> {
     const data = await fetch(`${this.url}/products/${id}`);
-    return await data.json() ?? {};
+    const jsonData = await data.json() ?? {};
+    return this.transformProduct(jsonData) ?? {};
+  }
+
+  transformProduct(apiProduct: any): Product {
+    return {
+      ...apiProduct,
+      imageUrl: apiProduct.image_url // Map image_url to imageUrl
+    };
   }
 
   async getAllBrands() : Promise<Brand[]> {

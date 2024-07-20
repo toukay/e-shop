@@ -47,7 +47,7 @@ hr {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .search-form input[type="text"] {
@@ -58,7 +58,7 @@ hr {
 
 .results {
     display: grid;
-    column-gap: 14px;
-    row-gap: 14px;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    column-gap: 30px;
+    row-gap: 40px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
