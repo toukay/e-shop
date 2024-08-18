@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
-from models import Base
+from src.models import Base
 import os
 
 base_dir = os.path.dirname(os.path.abspath(__file__))

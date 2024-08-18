@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from models import Brand
-from schemas import BrandInputSchema
-from repositories import BrandRepository
-from custom_exceptions import EntityNotFoundError
+from src.models import Brand
+from src.schemas import BrandInputSchema
+from src.repositories import BrandRepository
+from src.custom_exceptions import EntityNotFoundError
 
 
 class BrandService:

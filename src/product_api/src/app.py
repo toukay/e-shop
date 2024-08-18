@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import api_router
+from src.routes import api_router
 from contextlib import asynccontextmanager
-import database
+import src.database as database
 
 
 @asynccontextmanager

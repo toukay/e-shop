@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from models import Category
-from schemas import CategoryInputSchema
-from repositories import CategoryRepository
-from custom_exceptions import EntityNotFoundError
+from src.models import Category
+from src.schemas import CategoryInputSchema
+from src.repositories import CategoryRepository
+from src.custom_exceptions import EntityNotFoundError
 
 
 class CategoryService:

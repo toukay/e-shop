@@ -1,11 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from models import Product
-from schemas import ProductInputSchema
-from repositories import ProductRepository
-from services.brand_service import BrandService
-from services.product_type_service import ProductTypeService
-from services.category_service import CategoryService
-from custom_exceptions import EntityNotFoundError
+from src.models import Product
+from src.schemas import ProductInputSchema
+from src.repositories import ProductRepository
+from src.services.brand_service import BrandService
+from src.services.product_type_service import ProductTypeService
+from src.services.category_service import CategoryService
+from src.custom_exceptions import EntityNotFoundError
 
 
 class ProductService:

@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from schemas import CategoryInputSchema, CategorySchema
-from services.category_service import CategoryService
-from custom_exceptions import EntityNotFoundError
-import database
+from src.schemas import CategoryInputSchema, CategorySchema
+from src.services.category_service import CategoryService
+from src.custom_exceptions import EntityNotFoundError
+import src.database as database
 
 
 router = APIRouter()
