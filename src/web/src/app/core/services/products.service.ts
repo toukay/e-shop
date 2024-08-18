@@ -8,7 +8,7 @@ import { Category } from '../models/category';
   providedIn: 'root'
 })
 export class ProductsService {
-  url = "http://localhost:5000/api";
+  url = "http://localhost:8000/api";
 
   constructor() { }
 
