@@ -1,0 +1,12 @@
+@import "primeng/resources/themes/aura-light-noir/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+
+body {
+    margin: 8px;
+    caret-color: transparent;
+}
+
+input, textarea, select {
+    caret-color: auto;
+}

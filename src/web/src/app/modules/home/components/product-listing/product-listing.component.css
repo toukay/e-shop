@@ -1,0 +1,54 @@
+.listing {
+  background: var(--accent-color);
+  border-radius: 10px;
+  padding: 10px;
+  width: 370px;
+  height: auto;
+  transition: box-shadow 0.1s ease, border 0.1s ease;
+}
+
+.listing:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 2px solid hsl(0, 0%, 85%);
+}
+
+.listing-heading {
+  color: var(--primary-color);
+  margin: 0;
+  margin-top: 5px;
+  font-size: 1.15rem;
+}
+
+.listing-photo-container {
+  width: 100%;
+  height: 370px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.listing-photo {
+  width: auto;
+  height: 100%;
+  transform: scale(0.6); /* Adjust the scale to zoom out */
+  object-fit: contain;
+  object-position: center;
+}
+
+.listing-price {
+  margin: 0;
+  margin-top: 5px;
+  font-size: 1.1rem;
+}
+
+section.listing a {
+  padding-left: 20px;
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+section.listing a::after {
+  content: "\203A";
+  margin-left: 5px;
+}

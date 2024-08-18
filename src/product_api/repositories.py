@@ -9,6 +9,7 @@ from models import (
     Category
 )
 
+
 class BaseRepository[T]:
     def __init__(self, session: AsyncSession, model: T):
         self.session = session
@@ -18,7 +19,7 @@ class BaseRepository[T]:
         statement = select(self.model)
         result = await self.session.execute(statement)
         return result.scalars().all()
-    
+
     async def get(self, id: int) -> T:
         statement = select(self.model).where(self.model.id == id)
         result = await self.session.execute(statement)
@@ -55,7 +56,7 @@ class ProductRepository(BaseRepository[Product]):
             )
         )
         return result.scalars().all()
-    
+
     async def get(self, product_id: int) -> Product:
         result = await self.session.execute(
             select(Product).options(

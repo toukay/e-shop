@@ -15,6 +15,7 @@ async def get_brands(session: AsyncSession = Depends(database.generate_session))
     brands = await service.get_all_brands()
     return [BrandSchema.model_validate(brand).model_dump() for brand in brands]
 
+
 @router.get('/brands/{brand_id}', response_model=BrandSchema)
 async def get_brand(brand_id: int, session: AsyncSession = Depends(database.generate_session)):
     service = BrandService(session)
@@ -24,6 +25,7 @@ async def get_brand(brand_id: int, session: AsyncSession = Depends(database.gene
     except EntityNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
+
 @router.post('/brands', response_model=BrandSchema)
 async def create_brand(brand_data: BrandInputSchema, session: AsyncSession = Depends(database.generate_session)):
     service = BrandService(session)
@@ -32,6 +34,7 @@ async def create_brand(brand_data: BrandInputSchema, session: AsyncSession = Dep
         return BrandSchema.model_validate(brand).model_dump()
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.put('/brands/{brand_id}', response_model=BrandSchema)
 async def update_brand(brand_id: int, brand_data: BrandInputSchema, session: AsyncSession = Depends(database.generate_session)):
@@ -43,6 +46,7 @@ async def update_brand(brand_id: int, brand_data: BrandInputSchema, session: Asy
         return HTTPException(status_code=400, detail=str(e))
     except EntityNotFoundError as e:
         return HTTPException(status_code=404, detail=str(e))
+
 
 @router.delete('/brands/{brand_id}', status_code=204)
 async def delete_brand(brand_id: int, brand_data: BrandInputSchema, session: AsyncSession = Depends(database.generate_session)):

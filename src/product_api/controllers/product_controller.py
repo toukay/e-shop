@@ -15,6 +15,7 @@ async def get_products(session: AsyncSession = Depends(database.generate_session
     products = await service.get_all_products()
     return [ProductSchema.model_validate(product).model_dump() for product in products]
 
+
 @router.get('/products/{product_id}', response_model=ProductSchema)
 async def get_product(product_id: int, session: AsyncSession = Depends(database.generate_session)):
     service = ProductService(session)
@@ -24,6 +25,7 @@ async def get_product(product_id: int, session: AsyncSession = Depends(database.
     except EntityNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
+
 @router.post('/products', response_model=ProductSchema)
 async def create_product(product_data: ProductInputSchema, session: AsyncSession = Depends(database.generate_session)):
     service = ProductService(session)
@@ -32,6 +34,7 @@ async def create_product(product_data: ProductInputSchema, session: AsyncSession
         return ProductSchema.model_validate(product).model_dump()
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.put('/products/{product_id}', response_model=ProductSchema)
 async def update_product(product_id: int, product_data: ProductInputSchema, session: AsyncSession = Depends(database.generate_session)):
@@ -43,6 +46,7 @@ async def update_product(product_id: int, product_data: ProductInputSchema, sess
         raise HTTPException(status_code=400, detail=str(e))
     except EntityNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
 
 @router.delete('/products/{product_id}', status_code=204)
 async def delete_product(product_id: int, session: AsyncSession = Depends(database.generate_session)):
