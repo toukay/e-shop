@@ -1,6 +1,6 @@
+from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import (
-    DeclarativeBase, 
-    MappedAsDataclass, 
+    DeclarativeBase,
     Mapped,
     mapped_column,
     relationship
@@ -10,15 +10,13 @@ from sqlalchemy import (
     Column,
     ForeignKey,
     String,
-    Integer,
     DECIMAL
 )
-import pydantic
 from decimal import Decimal
 from typing import Optional
 
 
-class Base(DeclarativeBase):
+class Base(AsyncAttrs, DeclarativeBase):
     pass
 
 
@@ -41,19 +39,19 @@ class Product(Base):
 
     brand_id: Mapped[int] = mapped_column(ForeignKey("brand.id"))
     product_type_id: Mapped[int] = mapped_column(ForeignKey("product_type.id"))
-    
+
     brand: Mapped['Brand'] = relationship('Brand', back_populates="products")
     product_type: Mapped['ProductType'] = relationship('ProductType', back_populates="products")
     categories: Mapped[list['Category']] = relationship(
-        'Category', 
-        secondary=product_category_association, 
-        back_populates="products", 
+        'Category',
+        secondary=product_category_association,
+        back_populates="products",
     )
 
 
 class Brand(Base):
     __tablename__ = "brand"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, nullable=False)
     name: Mapped[str] = mapped_column(String, nullable=False)
 
@@ -64,7 +62,7 @@ class Brand(Base):
 
 class ProductType(Base):
     __tablename__ = "product_type"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, nullable=False)
     name: Mapped[str] = mapped_column(String, nullable=False)
 
@@ -75,12 +73,12 @@ class ProductType(Base):
 
 class Category(Base):
     __tablename__ = "category"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, nullable=False)
     name: Mapped[str] = mapped_column(String, nullable=False)
 
     products: Mapped[list['Product']] = relationship(
         'Product',
         secondary=product_category_association,
-        back_populates="categories", 
+        back_populates="categories",
     )

@@ -3,7 +3,6 @@ from pydantic import (
     ConfigDict,
     Field,
     field_validator,
-    ValidationError
 )
 from decimal import Decimal
 from typing import Optional
@@ -20,6 +19,7 @@ class ProductSchema(BaseModel):
     brand: 'BrandSchema'
     product_type: 'ProductTypeSchema'
     categories: list['CategorySchema']
+
 
 class ProductInputSchema(BaseModel):
     name: str = Field(..., min_length=1, max_length=100, description="Name of the product")
@@ -43,6 +43,7 @@ class BrandSchema(BaseModel):
     id: int
     name: str
 
+
 class BrandInputSchema(BaseModel):
     name: str = Field(..., min_length=1, max_length=100, description="Name of the brand")
 
@@ -59,6 +60,7 @@ class ProductTypeSchema(BaseModel):
     id: int
     name: str
 
+
 class ProductTypeInputSchema(BaseModel):
     name: str = Field(..., min_length=1, max_length=100, description="Name of the type")
 
@@ -74,6 +76,7 @@ class CategorySchema(BaseModel):
 
     id: int
     name: str
+
 
 class CategoryInputSchema(BaseModel):
     name: str = Field(..., min_length=1, max_length=100, description="Name of the category")
