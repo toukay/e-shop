@@ -1,0 +1,31 @@
+services:
+  product-api:
+    build:
+      context: ./src/product_api
+      dockerfile: Dockerfile
+    container_name: product-api
+    volumes:
+      - ./src/product_api:/usr/src/app
+      - ./src/product_api/src/eshop.db:/usr/src/app/src/eshop.db
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+    command: uvicorn src.app:app --host 0.0.0.0 --port 8000 --reload
+
+  web:
+    build:
+      context: ./src/web
+      dockerfile: Dockerfile
+    container_name: angular-web
+    volumes:
+      - ./src/web:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "4200:4200"
+    depends_on:
+      - product-api
+    command: ng serve --host 0.0.0.0 --port 4200
+
+volumes:
+  sqlite_data:
